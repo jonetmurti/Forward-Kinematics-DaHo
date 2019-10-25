@@ -29,5 +29,5 @@ Matrix4f FK::Transform(float a, float alpha, float d, float theta){
 void FK::Process(){
     //Kaki kiri
     LeftP1 = Transform(GetA(0, 1), GetAlpha(0, 1), GetD(0,1), GetTheta(0, 1))*Transform(GetA(1, 1), GetAlpha(0, 1), GetD(1,1), GetTheta(1, 1))*
-             Transform(GetA(2, 1), GetAlpha(2, 1), GetD(2,1), GetTheta(2, 1))*P1;
+             Transform(GetA(2, 1), GetAlpha(2, 1), GetD(2,1), GetTheta(2, 1))*Transform(GetA(3, 1), GetAlpha(3, 1), GetD(2,1), GetTheta(2, 1))*P1;
 }
