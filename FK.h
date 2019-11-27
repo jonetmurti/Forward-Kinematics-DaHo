@@ -1,26 +1,68 @@
-#ifndef _FK_H
-#define _FK_H
-#include <eigen3/Eigen/Dense>
+/* Created by Jonet Wira */
+/* 13518083 */
+
+#ifndef FK_H
+#define FK_H
+
+#include <Eigen/Dense>
+#include <ros/ros.h>
+
 
 using namespace Eigen;
 
 class FK {
 
     private :
-        Vector4f P1;
-        Vector4f P2;
-        Vector4f LeftP1;
-        Vector4f LeftP2;
-        Vector4f RightP1;
-        Vector4f RightP2;
+        double AngleData[21];
+
+        Vector4f p1;
+        Vector4f p2; 
+        Vector4f leftP1;
+        Vector4f leftP2;
+        Vector4f rightP1;
+        Vector4f rightP2;        
 
         // Joint Parameter
-        Matrix<float, 18, 1> A; //Jarak antara Origin(i) ke perpotongannya dengan z(i-1)
-        Matrix<float, 18, 1> Alpha; //Sudut antara z(i-1) dengan z(i) diukur dari x(i)
-        Matrix<float, 18, 1> D; //Jarak Origin(i-1) ke perpotongannya dengan x(i)
-        Matrix<float, 18, 1> Theta; // Sudut antara x(i-1) dengan x(i) diukur dari z(i-1)
+        Matrix<double, 21, 5> dhMat;
+
+
 
     public :
+
+        enum
+		{
+			ID_R_SHOULDER_PITCH     = 1,
+			ID_L_SHOULDER_PITCH     = 2,
+			ID_R_SHOULDER_ROLL      = 3,
+			ID_L_SHOULDER_ROLL      = 4,
+			ID_R_ELBOW              = 5,
+			ID_L_ELBOW              = 6,
+			ID_R_HIP_YAW            = 7,
+			ID_L_HIP_YAW            = 8,
+			ID_R_HIP_ROLL           = 9,
+			ID_L_HIP_ROLL           = 10,
+			ID_R_HIP_PITCH          = 11,
+			ID_L_HIP_PITCH          = 12,
+			ID_R_KNEE               = 13,
+			ID_L_KNEE               = 14,
+			ID_R_ANKLE_PITCH        = 15,
+			ID_L_ANKLE_PITCH        = 16,
+			ID_R_ANKLE_ROLL         = 17,
+			ID_L_ANKLE_ROLL         = 18,
+			ID_HEAD_PAN             = 19,
+			ID_HEAD_TILT            = 20,
+            ID_R_BASE               = 21,
+            ID_L_BASE               = 22,
+			NUMBER_OF_JOINTS
+		};
+
+        enum DH_PARAM {
+            A = 1,
+            ALPHA = 2,
+            THETA = 3,
+            D = 4
+        };
+
         FK();
         ~FK();
 
@@ -31,15 +73,26 @@ class FK {
         Vector4f GetLeftP2();
         Vector4f GetRightP1();
         Vector4f GetRightP2();
+        double GetLeftglobal(int i,int j);
+        double GetRightglobal(int i,int j);
 
         //Param Getter
-        float GetA(int i, int j);
-        float GetAlpha(int i, int j);
-        float GetD(int i, int j);
-        float GetTheta(int i, int j);
+        double GetA(int ID);
+        double GetAlpha(int ID);
+        double GetTheta(int ID);
+        double GetD(int ID);
 
 
-        Matrix4f Transform(float a, float alpha, float d, float theta);
+        //Param Setter
+
+        //PRINT
+        void PrintLeftNormal();
+        void PrintRightNormal();
+
+        //Process
+        Matrix4f Transform(double a, double alpha, double d, double theta);
+        double DegToRad(double a);
+        void ThetaOffset();
         void Process();
 };
 

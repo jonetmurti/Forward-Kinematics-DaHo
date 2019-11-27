@@ -1,15 +1,31 @@
+/* Created by Jonet Wira Murti */
+/* 13518083 */
+
 #include <iostream>
 #include "FK.h"
-#include <eigen3/Eigen/Dense>
-#include <cmath>
+#include <Eigen/Dense>
+#include <math.h>
 
 using namespace Eigen;
 using namespace std;
 
+#define PI 3.14159265358979323846
+
 FK::FK() {
-    //
-    P1 << 0, 0, 3.44, 1;
-    P2 << 3.32, 0, 3.44, 1;
+    dhMat(ID_R_HIP_YAW, A) = ;dhMat(ID_R_HIP_YAW, ALPHA) =  ;dhMat(ID_R_HIP_YAW, THETA) = ;dhMat(ID_R_HIP_YAW, D) = 
+    dhMat(ID_L_HIP_YAW, A) = ;dhMat(ID_L_HIP_YAW, ALPHA) =  ;dhMat(ID_L_HIP_YAW, THETA) = ;dhMat(ID_L_HIP_YAW, D) = 
+    dhMat(ID_R_HIP_ROLL, A) = ;dhMat(ID_R_HIP_ROLL, ALPHA) =  ;dhMat(ID_R_HIP_ROLL, THETA) = ;dhMat(ID_R_HIP_ROLL, D) = 
+    dhMat(ID_L_HIP_ROLL, A) = ;dhMat(ID_L_HIP_ROLL, ALPHA) =  ;dhMat(ID_L_HIP_ROLL, THETA) = ;dhMat(ID_L_HIP_ROLL, D) = 
+    dhMat(ID_R_HIP_PITCH, A) = ;dhMat(ID_R_HIP_PITCH, ALPHA) =  ;dhMat(ID_R_HIP_PITCH, THETA) = ;dhMat(ID_R_HIP_PITCH, D) = 
+    dhMat(ID_L_HIP_PITCH, A) = ;dhMat(ID_L_HIP_PITCH, ALPHA) =  ;dhMat(ID_L_HIP_PITCH, THETA) = ;dhMat(ID_L_HIP_PITCH, D) = 
+    dhMat(ID_R_KNEE, A) = ;dhMat(ID_R_KNEE, ALPHA) =  ;dhMat(ID_R_KNEE, THETA) = ;dhMat(ID_R_KNEE, D) = 
+    dhMat(ID_L_KNEE, A) = ;dhMat(ID_L_KNEE, ALPHA) =  ;dhMat(ID_L_KNEE, THETA) = ;dhMat(ID_L_KNEE, D) = 
+    dhMat(ID_R_ANKLE_PITCH, A) = ;dhMat(ID_R_ANKLE_PITCH, ALPHA) =  ;dhMat(ID_R_ANKLE_PITCH, THETA) = ;dhMat(ID_R_ANKLE_PITCH, D) = 
+    dhMat(ID_L_ANKLE_PITCH, A) = ;dhMat(ID_L_ANKLE_PITCH, ALPHA) =  ;dhMat(ID_L_ANKLE_PITCH, THETA) = ;dhMat(ID_L_ANKLE_PITCH, D) = 
+    dhMat(ID_R_ANKLE_ROLL, A) = ;dhMat(ID_R_ANKLE_ROLL, ALPHA) =  ;dhMat(ID_R_ANKLE_ROLL, THETA) = ;dhMat(ID_R_ANKLE_ROLL, D) = 
+    dhMat(ID_L_ANKLE_ROLL, A) = ;dhMat(ID_L_ANKLE_ROLL, ALPHA) =  ;dhMat(ID_L_ANKLE_ROLL, THETA) = ;dhMat(ID_L_ANKLE_ROLL, D) = 
+    dhMat(ID_HEAD_PAN, A) = ;dhMat(ID_HEAD_PAN, ALPHA) =  ;dhMat(ID_HEAD_PAN, THETA) = ;dhMat(ID_HEAD_PAN, D) = 
+    dhMat(ID_HEAD_TILT, A) = ;dhMat(ID_HEAD_TILT, ALPHA) = ;dhMat(ID_HEAD_TILT, THETA) = ;dhMat(ID_HEAD_TILT, D) = ;
 }
 
 FK::~FK() {
@@ -18,39 +34,50 @@ FK::~FK() {
 
 //Vector Getter
 Vector4f FK::GetP1(){
-    return P1;
+    return p1;
 }
 Vector4f FK::GetP2(){
-    return P2;
+    return p2;
 }
 Vector4f FK::GetLeftP1(){
-    return LeftP1;
+    return leftP1;
 }
 Vector4f FK::GetLeftP2(){
-    return LeftP2;
+    return leftP2;
 }
 Vector4f FK::GetRightP1(){
-    return RightP1;
+    return rightP1;
 }
 Vector4f FK::GetRightP2(){
-    return RightP2;
+    return rightP2;
 }
 
 //Param Getter
-float GetA(int i, int j){
-    return A(i, j);
+double FK::GetA(int ID) {
+
 }
-float GetAlpha(int i, int j){
-    return Alpha(i, j);
+double FK::GetAlpha(int ID) {
+
 }
-float GetD(int i, int j){
-    return D(i, j);
+double FK::GetTheta(int ID) {
+
 }
-float GetTheta(int i, int j){
-    return Theta(i, j);
+double FK::GetD(int ID) {
+    
 }
 
-Matrix4f FK::Transform(float a, float alpha, float d, float theta){
+//Param Setter
+
+//Print
+void FK::PrintLeftNormal() {
+    cout << leftP2 - leftP1;
+}
+void FK::PrintRightNormal() {
+    cout << rightP2 - rightP1;
+}
+
+//Process
+Matrix4f FK::Transform(double a, double alpha, double d, double theta){
     Matrix4f P;
     P << cos(theta), (-1)*sin(theta)*cos(alpha), sin(theta)*sin(alpha), a*cos(theta),
          sin(theta), cos(theta)*cos(alpha), (-1)*cos(theta)*sin(alpha), a*sin(theta),
@@ -60,28 +87,35 @@ Matrix4f FK::Transform(float a, float alpha, float d, float theta){
     return P;
 }
 
+double FK::DegToRad(double a){
+    return a*PI/180;
+}
+
+void ThetaOffset();
+
 void FK::Process(){
     //Kaki kiri
-    LeftP1 = Transform(GetA(0, 1), GetAlpha(0, 1), GetD(0, 1), GetTheta(0, 1))*Transform(GetA(1, 1), GetAlpha(1, 1), GetD(1, 1), GetTheta(1, 1))*
-             Transform(GetA(2, 1), GetAlpha(2, 1), GetD(2, 1), GetTheta(2, 1))*Transform(GetA(3, 1), GetAlpha(3, 1), GetD(3, 1), GetTheta(3, 1))*
-             Transform(GetA(4, 1), GetAlpha(4, 1), GetD(4, 1), GetTheta(4, 1))*Transform(GetA(5, 1), GetAlpha(5, 1), GetD(5, 1), GetTheta(5, 1))*
-             Transform(GetA(6, 1), GetAlpha(6, 1), GetD(6, 1), GetTheta(6, 1))*Transform(GetA(7, 1), GetAlpha(7, 1), GetD(7, 1), GetTheta(7, 1))*
-             Transform(GetA(8, 1), GetAlpha(8, 1), GetD(8, 1), GetTheta(8, 1))*P1;
-    LeftP2 = Transform(GetA(0, 1), GetAlpha(0, 1), GetD(0, 1), GetTheta(0, 1))*Transform(GetA(1, 1), GetAlpha(1, 1), GetD(1, 1), GetTheta(1, 1))*
-             Transform(GetA(2, 1), GetAlpha(2, 1), GetD(2, 1), GetTheta(2, 1))*Transform(GetA(3, 1), GetAlpha(3, 1), GetD(3, 1), GetTheta(3, 1))*
-             Transform(GetA(4, 1), GetAlpha(4, 1), GetD(4, 1), GetTheta(4, 1))*Transform(GetA(5, 1), GetAlpha(5, 1), GetD(5, 1), GetTheta(5, 1))*
-             Transform(GetA(6, 1), GetAlpha(6, 1), GetD(6, 1), GetTheta(6, 1))*Transform(GetA(7, 1), GetAlpha(7, 1), GetD(7, 1), GetTheta(7, 1))*
-             Transform(GetA(8, 1), GetAlpha(8, 1), GetD(8, 1), GetTheta(8, 1))*P2;
+
+    leftP1 = Transform(GetA(0, 0), GetAlpha(0, 0), GetD(0, 0), GetTheta(0, 0))*Transform(GetA(1, 0), GetAlpha(1, 0), GetD(1, 0), GetTheta(1, 0))*
+             Transform(GetA(2, 0), GetAlpha(2, 0), GetD(2, 0), GetTheta(2, 0))*Transform(GetA(3, 0), GetAlpha(3, 0), GetD(3, 0), GetTheta(3, 0))*
+             Transform(GetA(4, 0), GetAlpha(4, 0), GetD(4, 0), GetTheta(4, 0))*Transform(GetA(5, 0), GetAlpha(5, 0), GetD(5, 0), GetTheta(5, 0))*
+             Transform(GetA(6, 0), GetAlpha(6, 0), GetD(6, 0), GetTheta(6, 0))*Transform(GetA(8, 0), GetAlpha(8, 0), GetD(8, 0), GetTheta(14, 0))*
+             Transform(GetA(9, 0), GetAlpha(9, 0), GetD(9, 0), GetTheta(15, 0))*p1;
+    leftP2 = Transform(GetA(0, 0), GetAlpha(0, 0), GetD(0, 0), GetTheta(0, 0))*Transform(GetA(1, 0), GetAlpha(1, 0), GetD(1, 0), GetTheta(1, 0))*
+             Transform(GetA(2, 0), GetAlpha(2, 0), GetD(2, 0), GetTheta(2, 0))*Transform(GetA(3, 0), GetAlpha(3, 0), GetD(3, 0), GetTheta(3, 0))*
+             Transform(GetA(4, 0), GetAlpha(4, 0), GetD(4, 0), GetTheta(4, 0))*Transform(GetA(5, 0), GetAlpha(5, 0), GetD(5, 0), GetTheta(5, 0))*
+             Transform(GetA(6, 0), GetAlpha(6, 0), GetD(6, 0), GetTheta(6, 0))*Transform(GetA(8, 0), GetAlpha(8, 0), GetD(8, 0), GetTheta(14, 0))*
+             Transform(GetA(9, 0), GetAlpha(9, 0), GetD(9, 0), GetTheta(15, 0))*p2;
 
     //Kaki kanan
-    RightP1= Transform(GetA(9, 1), GetAlpha(9, 1), GetD(9, 1), GetTheta(9, 1))*Transform(GetA(10, 1), GetAlpha(10, 1), GetD(10, 1), GetTheta(10, 1))*
-             Transform(GetA(11, 1), GetAlpha(11, 1), GetD(11, 1), GetTheta(11, 1))*Transform(GetA(12, 1), GetAlpha(12, 1), GetD(12, 1), GetTheta(12, 1))*
-             Transform(GetA(13, 1), GetAlpha(13, 1), GetD(13, 1), GetTheta(13, 1))*Transform(GetA(14, 1), GetAlpha(14, 1), GetD(14, 1), GetTheta(14, 1))*
-             Transform(GetA(15, 1), GetAlpha(15, 1), GetD(15, 1), GetTheta(15, 1))*Transform(GetA(16, 1), GetAlpha(16, 1), GetD(16, 1), GetTheta(16, 1))*
-             Transform(GetA(17, 1), GetAlpha(17, 1), GetD(17, 1), GetTheta(17, 1))*P1;
-    RightP2= Transform(GetA(9, 1), GetAlpha(9, 1), GetD(9, 1), GetTheta(9, 1))*Transform(GetA(10, 1), GetAlpha(10, 1), GetD(10, 1), GetTheta(10, 1))*
-             Transform(GetA(11, 1), GetAlpha(11, 1), GetD(11, 1), GetTheta(11, 1))*Transform(GetA(12, 1), GetAlpha(12, 1), GetD(12, 1), GetTheta(12, 1))*
-             Transform(GetA(13, 1), GetAlpha(13, 1), GetD(13, 1), GetTheta(13, 1))*Transform(GetA(14, 1), GetAlpha(14, 1), GetD(14, 1), GetTheta(14, 1))*
-             Transform(GetA(15, 1), GetAlpha(15, 1), GetD(15, 1), GetTheta(15, 1))*Transform(GetA(16, 1), GetAlpha(16, 1), GetD(16, 1), GetTheta(16, 1))*
-             Transform(GetA(17, 1), GetAlpha(17, 1), GetD(17, 1), GetTheta(17, 1))*P2;
+    rightP1= Transform(GetA(0, 0), GetAlpha(0, 0), GetD(0, 0), GetTheta(7, 0))*Transform(GetA(1, 0), GetAlpha(1, 0), GetD(1, 0), GetTheta(8, 0))*
+             Transform(GetA(2, 0), GetAlpha(2, 0), GetD(2, 0), GetTheta(9, 0))*Transform(GetA(3, 0), GetAlpha(3, 0), GetD(3, 0), GetTheta(10, 0))*
+             Transform(GetA(4, 0), GetAlpha(4, 0), GetD(4, 0), GetTheta(11, 0))*Transform(GetA(5, 0), GetAlpha(5, 0), GetD(5, 0), GetTheta(12, 0))*
+             Transform(GetA(7, 0), GetAlpha(7, 0), GetD(7, 0), GetTheta(13, 0))*Transform(GetA(8, 0), GetAlpha(8, 0), GetD(8, 0), GetTheta(14, 0))*
+             Transform(GetA(9, 0), GetAlpha(9, 0), GetD(9, 0), GetTheta(15, 0))*P1;
+    rightP2= Transform(GetA(0, 0), GetAlpha(0, 0), GetD(0, 0), GetTheta(7, 0))*Transform(GetA(1, 0), GetAlpha(1, 0), GetD(1, 0), GetTheta(8, 0))*
+             Transform(GetA(2, 0), GetAlpha(2, 0), GetD(2, 0), GetTheta(9, 0))*Transform(GetA(3, 0), GetAlpha(3, 0), GetD(3, 0), GetTheta(10, 0))*
+             Transform(GetA(4, 0), GetAlpha(4, 0), GetD(4, 0), GetTheta(11, 0))*Transform(GetA(5, 0), GetAlpha(5, 0), GetD(5, 0), GetTheta(12, 0))*
+             Transform(GetA(7, 0), GetAlpha(7, 0), GetD(7, 0), GetTheta(13, 0))*Transform(GetA(8, 0), GetAlpha(8, 0), GetD(8, 0), GetTheta(14, 0))*
+             Transform(GetA(9, 0), GetAlpha(9, 0), GetD(9, 0), GetTheta(15, 0))*P2;
 }
