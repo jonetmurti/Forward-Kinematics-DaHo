@@ -82,10 +82,12 @@ class FK {
 
 
         //Param Setter
+        void ThetaSet(int ID, double val);
 
         //PRINT
         void PrintLeftNormal();
         void PrintRightNormal();
+        void PrintParam();
 
         //Process
         Matrix4f Transform(double a, double alpha, double d, double theta);
