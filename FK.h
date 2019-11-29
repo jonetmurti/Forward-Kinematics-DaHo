@@ -4,8 +4,7 @@
 #ifndef FK_H
 #define FK_H
 
-#include <Eigen/Dense>
-#include <ros/ros.h>
+#include <eigen3/Eigen/Dense>
 
 
 using namespace Eigen;
@@ -83,6 +82,8 @@ class FK {
 
         //Param Setter
         void ThetaSet(int ID, double val);
+        void P1Set(double a, double b, double c);
+        void P2Set(double a, double b, double c);
 
         //PRINT
         void PrintLeftNormal();

@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include "FK.h"
-#include <Eigen/Dense>
+#include <eigen3/Eigen/Dense>
 #include <math.h>
 
 using namespace Eigen;
@@ -72,16 +72,30 @@ double FK::GetD(int ID) {
 //Param Setter
 void FK::ThetaSet(int ID, double val)
 {
-    dhMat(ID, THETA) = val;
+    dhMat(ID, THETA) += DegToRad(val);
+}
+void FK::P1Set(double a, double b, double c)
+{
+    p1 << a, 
+          b, 
+          c, 
+          1;
+}
+void FK::P2Set(double a, double b, double c)
+{
+    p2 << a, 
+          b, 
+          c, 
+          1;
 }
 
 
 //Print
 void FK::PrintLeftNormal() {
-    cout << leftP2 - leftP1;
+    cout << "Left Normal : " << endl << leftP2 - leftP1 << endl;
 }
 void FK::PrintRightNormal() {
-    cout << rightP2 - rightP1;
+    cout << "Right Normal : " << endl << rightP2 - rightP1 << endl;
 }
 void FK::PrintParam()
 {
@@ -126,41 +140,41 @@ double FK::DegToRad(double a){
 void FK::Process(){
     //Kaki kiri
 
-    leftP1 = Transform(GetA(ID_L_BASE), GetAlpha(ID_L_BASE), GetD(ID_L_BASE), GetTheta(ID_L_BASE))*
+    leftP1 = /* Transform(GetA(ID_L_BASE), GetAlpha(ID_L_BASE), GetD(ID_L_BASE), GetTheta(ID_L_BASE))*
              Transform(GetA(ID_L_ANKLE_ROLL), GetAlpha(ID_L_ANKLE_ROLL), GetD(ID_L_ANKLE_ROLL), GetTheta(ID_L_ANKLE_ROLL))*
              Transform(GetA(ID_L_ANKLE_PITCH), GetAlpha(ID_L_ANKLE_PITCH), GetD(ID_L_ANKLE_PITCH), GetTheta(ID_L_ANKLE_PITCH))*
              Transform(GetA(ID_L_KNEE), GetAlpha(ID_L_KNEE), GetD(ID_L_KNEE), GetTheta(ID_L_KNEE))*
              Transform(GetA(ID_L_HIP_PITCH), GetAlpha(ID_L_HIP_PITCH), GetD(ID_L_HIP_PITCH), GetTheta(ID_L_HIP_PITCH))*
-             Transform(GetA(ID_L_HIP_ROLL), GetAlpha(ID_L_HIP_ROLL), GetD(ID_L_HIP_ROLL), GetTheta(ID_L_HIP_ROLL))*
+             Transform(GetA(ID_L_HIP_ROLL), GetAlpha(ID_L_HIP_ROLL), GetD(ID_L_HIP_ROLL), GetTheta(ID_L_HIP_ROLL))* */
              Transform(GetA(ID_L_HIP_YAW), GetAlpha(ID_L_HIP_YAW), GetD(ID_L_HIP_YAW), GetTheta(ID_L_HIP_YAW))*
              Transform(GetA(ID_HEAD_PAN), GetAlpha(ID_HEAD_PAN), GetD(ID_HEAD_PAN), GetTheta(ID_HEAD_PAN))*
              Transform(GetA(ID_HEAD_TILT), GetAlpha(ID_HEAD_TILT), GetD(ID_HEAD_TILT), GetTheta(ID_HEAD_TILT))*p1;
-    leftP2 = Transform(GetA(ID_L_BASE), GetAlpha(ID_L_BASE), GetD(ID_L_BASE), GetTheta(ID_L_BASE))*
+    leftP2 = /* Transform(GetA(ID_L_BASE), GetAlpha(ID_L_BASE), GetD(ID_L_BASE), GetTheta(ID_L_BASE))*
              Transform(GetA(ID_L_ANKLE_ROLL), GetAlpha(ID_L_ANKLE_ROLL), GetD(ID_L_ANKLE_ROLL), GetTheta(ID_L_ANKLE_ROLL))*
              Transform(GetA(ID_L_ANKLE_PITCH), GetAlpha(ID_L_ANKLE_PITCH), GetD(ID_L_ANKLE_PITCH), GetTheta(ID_L_ANKLE_PITCH))*
              Transform(GetA(ID_L_KNEE), GetAlpha(ID_L_KNEE), GetD(ID_L_KNEE), GetTheta(ID_L_KNEE))*
              Transform(GetA(ID_L_HIP_PITCH), GetAlpha(ID_L_HIP_PITCH), GetD(ID_L_HIP_PITCH), GetTheta(ID_L_HIP_PITCH))*
-             Transform(GetA(ID_L_HIP_ROLL), GetAlpha(ID_L_HIP_ROLL), GetD(ID_L_HIP_ROLL), GetTheta(ID_L_HIP_ROLL))*
+             Transform(GetA(ID_L_HIP_ROLL), GetAlpha(ID_L_HIP_ROLL), GetD(ID_L_HIP_ROLL), GetTheta(ID_L_HIP_ROLL))* */
              Transform(GetA(ID_L_HIP_YAW), GetAlpha(ID_L_HIP_YAW), GetD(ID_L_HIP_YAW), GetTheta(ID_L_HIP_YAW))*
              Transform(GetA(ID_HEAD_PAN), GetAlpha(ID_HEAD_PAN), GetD(ID_HEAD_PAN), GetTheta(ID_HEAD_PAN))*
              Transform(GetA(ID_HEAD_TILT), GetAlpha(ID_HEAD_TILT), GetD(ID_HEAD_TILT), GetTheta(ID_HEAD_TILT))*p2;
 
     //Kaki kanan
-    rightP1= Transform(GetA(ID_R_BASE), GetAlpha(ID_R_BASE), GetD(ID_R_BASE), GetTheta(ID_R_BASE))*
+    rightP1= /* Transform(GetA(ID_R_BASE), GetAlpha(ID_R_BASE), GetD(ID_R_BASE), GetTheta(ID_R_BASE))*
              Transform(GetA(ID_R_ANKLE_ROLL), GetAlpha(ID_R_ANKLE_ROLL), GetD(ID_R_ANKLE_ROLL), GetTheta(ID_R_ANKLE_ROLL))*
              Transform(GetA(ID_R_ANKLE_PITCH), GetAlpha(ID_R_ANKLE_PITCH), GetD(ID_R_ANKLE_PITCH), GetTheta(ID_R_ANKLE_PITCH))*
              Transform(GetA(ID_R_KNEE), GetAlpha(ID_R_KNEE), GetD(ID_R_KNEE), GetTheta(ID_R_KNEE))*
              Transform(GetA(ID_R_HIP_PITCH), GetAlpha(ID_R_HIP_PITCH), GetD(ID_R_HIP_PITCH), GetTheta(ID_R_HIP_PITCH))*
-             Transform(GetA(ID_R_HIP_ROLL), GetAlpha(ID_R_HIP_ROLL), GetD(ID_R_HIP_ROLL), GetTheta(ID_R_HIP_ROLL))*
-             Transform(GetA(ID_R_HIP_YAW), GetAlpha(ID_R_HIP_YAW), GetD(ID_R_HIP_YAW), GetTheta(ID_R_HIP_YAW))*
+             Transform(GetA(ID_R_HIP_ROLL), GetAlpha(ID_R_HIP_ROLL), GetD(ID_R_HIP_ROLL), GetTheta(ID_R_HIP_ROLL))* */
+             Transform(GetA(ID_R_HIP_YAW), GetAlpha(ID_R_HIP_YAW), GetD(ID_R_HIP_YAW), GetTheta(ID_R_HIP_YAW))* 
              Transform(GetA(ID_HEAD_PAN), GetAlpha(ID_HEAD_PAN), GetD(ID_HEAD_PAN), GetTheta(ID_HEAD_PAN))*
              Transform(GetA(ID_HEAD_TILT), GetAlpha(ID_HEAD_TILT), GetD(ID_HEAD_TILT), GetTheta(ID_HEAD_TILT))*p1;
-    rightP2= Transform(GetA(ID_R_BASE), GetAlpha(ID_R_BASE), GetD(ID_R_BASE), GetTheta(ID_R_BASE))*
+    rightP2= /* Transform(GetA(ID_R_BASE), GetAlpha(ID_R_BASE), GetD(ID_R_BASE), GetTheta(ID_R_BASE))*
              Transform(GetA(ID_R_ANKLE_ROLL), GetAlpha(ID_R_ANKLE_ROLL), GetD(ID_R_ANKLE_ROLL), GetTheta(ID_R_ANKLE_ROLL))*
              Transform(GetA(ID_R_ANKLE_PITCH), GetAlpha(ID_R_ANKLE_PITCH), GetD(ID_R_ANKLE_PITCH), GetTheta(ID_R_ANKLE_PITCH))*
              Transform(GetA(ID_R_KNEE), GetAlpha(ID_R_KNEE), GetD(ID_R_KNEE), GetTheta(ID_R_KNEE))*
              Transform(GetA(ID_R_HIP_PITCH), GetAlpha(ID_R_HIP_PITCH), GetD(ID_R_HIP_PITCH), GetTheta(ID_R_HIP_PITCH))*
-             Transform(GetA(ID_R_HIP_ROLL), GetAlpha(ID_R_HIP_ROLL), GetD(ID_R_HIP_ROLL), GetTheta(ID_R_HIP_ROLL))*
+             Transform(GetA(ID_R_HIP_ROLL), GetAlpha(ID_R_HIP_ROLL), GetD(ID_R_HIP_ROLL), GetTheta(ID_R_HIP_ROLL))* */
              Transform(GetA(ID_R_HIP_YAW), GetAlpha(ID_R_HIP_YAW), GetD(ID_R_HIP_YAW), GetTheta(ID_R_HIP_YAW))*
              Transform(GetA(ID_HEAD_PAN), GetAlpha(ID_HEAD_PAN), GetD(ID_HEAD_PAN), GetTheta(ID_HEAD_PAN))*
              Transform(GetA(ID_HEAD_TILT), GetAlpha(ID_HEAD_TILT), GetD(ID_HEAD_TILT), GetTheta(ID_HEAD_TILT))*p2;
