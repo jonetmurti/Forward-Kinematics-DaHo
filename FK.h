@@ -23,7 +23,7 @@ class FK {
         Vector4f rightP2;        
 
         // Joint Parameter
-        Matrix<double, 21, 5> dhMat;
+        Matrix<double, 23, 5> dhMat;
 
 
 
@@ -73,8 +73,6 @@ class FK {
         Vector4f GetLeftP2();
         Vector4f GetRightP1();
         Vector4f GetRightP2();
-        double GetLeftglobal(int i,int j);
-        double GetRightglobal(int i,int j);
 
         //Param Getter
         double GetA(int ID);

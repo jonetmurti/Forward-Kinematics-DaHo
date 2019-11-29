@@ -54,15 +54,16 @@ Vector4f FK::GetRightP2(){
 
 //Param Getter
 double FK::GetA(int ID) {
-
+    return dhMat(ID, A);
 }
 double FK::GetAlpha(int ID) {
-
+    return dhMat(ID, ALPHA);
 }
 double FK::GetTheta(int ID) {
-
+    return dhMat(ID, THETA);
 }
 double FK::GetD(int ID) {
+    return dhMat(ID, D);
     
 }
 
@@ -96,7 +97,7 @@ void ThetaOffset();
 void FK::Process(){
     //Kaki kiri
 
-    leftP1 = Transform(GetA(0, 0), GetAlpha(0, 0), GetD(0, 0), GetTheta(0, 0))*Transform(GetA(1, 0), GetAlpha(1, 0), GetD(1, 0), GetTheta(1, 0))*
+    leftP1 = Transform(GetA(ID_L_BASE), GetAlpha(0, 0), GetD(0, 0), GetTheta(0, 0))*Transform(GetA(1, 0), GetAlpha(1, 0), GetD(1, 0), GetTheta(1, 0))*
              Transform(GetA(2, 0), GetAlpha(2, 0), GetD(2, 0), GetTheta(2, 0))*Transform(GetA(3, 0), GetAlpha(3, 0), GetD(3, 0), GetTheta(3, 0))*
              Transform(GetA(4, 0), GetAlpha(4, 0), GetD(4, 0), GetTheta(4, 0))*Transform(GetA(5, 0), GetAlpha(5, 0), GetD(5, 0), GetTheta(5, 0))*
              Transform(GetA(6, 0), GetAlpha(6, 0), GetD(6, 0), GetTheta(6, 0))*Transform(GetA(8, 0), GetAlpha(8, 0), GetD(8, 0), GetTheta(14, 0))*
